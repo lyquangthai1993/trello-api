@@ -1,15 +1,8 @@
-### Bộ code base để bắt đầu học khóa MERN Stack Pro (VIẾT CÁC REST API CHUẨN CHỈNH) - Lập Trình qua dự án thực tế Trello Clone trên YouTube của mình nhé các bạn!
-### Base project for my MERN Stack Pro Course - Build Trello App on YouTube!
+### Bộ code base được lấy từ trungquandev để tự học BE
 
-- Link Download Full Source Code hoàn chỉnh của bộ này và ủng hộ mình: (Sắp có...)
+### Link github gốc: https://github.com/trungquandev/nodejs-express-mongodb-rest-api-boilerplate
 
-- Link YouTube Playlist: https://www.youtube.com/playlist?list=PLP6tw4Zpj-RJP2-YrhtkWqObMQ-AA4TDy
-
-### Hướng dẫn clone Repo code này về máy các bạn chuẩn nhất ở đây nhé:
-
-- Link: https://youtu.be/8hhXamKIdsY
-
-### Requirements - Thông tin của bộ Code Base này - Chuẩn các phiên bản dưới đây để bắt đầu học: (Semantic Versioning)
+### Requirements
 
 ```
 * nodejs = v18.16.0
@@ -30,20 +23,4 @@
 * "babel-plugin-module-resolver": "^5.0.0"
 ```
 
-### About Me - Thông tin về mình:
 
-Author: **Trungquandev - Một Lập Trình Viên** & **CodeTQ**
-
-Blog: https://trungquandev.com/
-
-CV: https://cv.trungquandev.com/
-
-YouTube 01 (Trungquandev - Một Lập Trình Viên): https://www.youtube.com/@trungquandev
-
-YouTube 02 (CodeTQ): https://www.youtube.com/@code-tq
-
-"Learning new everyday not the copycat of yesterday!"
-
-"A bit of fragrance clings to the hand that gives flowers!"
-
-Thanks for watching!
