@@ -3,13 +3,12 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import express from 'express'
-import { StatusCodes } from 'http-status-codes'
-const Router = express.Router()
+import express from 'express';
+const Router = express.Router();
 
 Router.route('/')
   .get()
-  .post()
+  .post();
 
 
-export const APIs_V1=Router
+export const APIs_V1=Router;

@@ -10,7 +10,7 @@ import { boardController } from '~/controllers/boardController';
 
 const Router = express.Router();
 
-Router.route('/:id')
+Router.route('/')
   .get((req, res) => {
     res.status(StatusCodes.OK).json({
       messge: 'API GET LIST BOARDS'
