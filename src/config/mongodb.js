@@ -3,9 +3,11 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-const MONGODB_URI = process.env.MONGODB_URI;
+import { env } from '~/config/environment';
 
-const DATABASE_NAME = process.env.DATABASE_NAME;
+const MONGODB_URI = env.MONGODB_URI;
+
+const DATABASE_NAME = env.DATABASE_NAME;
 
 import { MongoClient, ServerApiVersion } from 'mongodb';
 

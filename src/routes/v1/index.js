@@ -10,9 +10,7 @@ import { boardRoutes } from '~/routes/v1/boardRoutes';
 const Router = express.Router();
 
 Router.get('/status', (req, res) => {
-  res.status(StatusCodes.OK).json({
-    messge: 'V1 ready to use'
-  });
+  res.status(StatusCodes.OK).json({ messge: 'V1 ready to use' });
 });
 
 Router.use('/boards', boardRoutes);

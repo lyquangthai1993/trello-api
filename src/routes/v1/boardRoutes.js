@@ -3,21 +3,19 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import express from 'express'
-import { StatusCodes } from 'http-status-codes'
-const Router = express.Router()
+import express from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { boardValidation } from '~/validations/boardValidation';
+
+const Router = express.Router();
 
 Router.route('/')
   .get((req, res) => {
     res.status(StatusCodes.OK).json({
       messge: 'API GET LIST BOARDS'
-    })
+    });
   })
-  .post((req, res) => {
-    res.status(StatusCodes.CREATED).json({
-      messge: 'API CREATED BOARD'
-    })
-  })
+  .post(boardValidation.createNew);
 
 
-export const boardRoutes=Router
+export const boardRoutes = Router;
