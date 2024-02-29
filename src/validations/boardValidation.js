@@ -6,12 +6,29 @@
 import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 
-const createNew = (req, res, next) => {
-  const correctCondition = Joi.object({});
-
-  res.status(StatusCodes.OK).json({
-    messge: 'POST FROM VALIDATION API CREATE NEW BOARD'
+const createNew = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    title: Joi.string().required().min(3).max(50).trim().strict().messages({
+      'any.required': 'This filed is required 1111',
+      'string.empty': 'This filed is required 2222'
+    }),
+    description: Joi.string().required().min(3).max(256).trim().strict()
   });
+
+
+  try {
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false
+    });
+
+    //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
+    next();
+  } catch (error) {
+    console.log('error: ', error);
+    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      errors: new Error(error).message
+    });
+  }
 };
 
 export const boardValidation = {

@@ -13,6 +13,7 @@ import { mapOrder } from '~/utils/sorts.js';
 
 const START_SERVER = () => {
   const app = express();
+  app.use(express.json());
 
   const hostname = env.APP_HOST;
   const port = env.APP_PORT;
