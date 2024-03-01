@@ -9,7 +9,7 @@ import exitHook from 'async-exit-hook';
 import { CLOSE_DB, CONNECT_DB, GET_DB } from '~/config/mongodb';
 import { env } from '~/config/environment';
 import { APIs_V1 } from '~/routes/v1';
-import { mapOrder } from '~/utils/sorts.js';
+// import { mapOrder } from '~/utils/sorts.js';
 import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware';
 
 const START_SERVER = () => {
