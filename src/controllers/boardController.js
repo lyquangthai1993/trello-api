@@ -14,30 +14,14 @@ const createNew = async (req, res, next) => {
   }
 };
 
-const getDetail = async (req, res, next) => {
-  try {
-    const params = req.params;
-    const { id: boardId } = params;
-    const boardDetail = await boardService.getDetail(boardId);
-    res.status(StatusCodes.OK).json(boardDetail);
-  } catch (error) {
-    next(error);
-  }
-};
-
-
 const deleteId = async (req, res, next) => {
   try {
     const params = req.params;
     const { id: boardId } = params;
     const boardDetail = await boardService.getDetail(boardId);
 
-    console.log('deleteId-----', boardDetail)
-    if(boardDetail){
+    console.log('deleteId-----', boardDetail);
 
-    }else{
-
-    }
 
     res.status(StatusCodes.OK).json(boardDetail);
   } catch (error) {
@@ -45,8 +29,21 @@ const deleteId = async (req, res, next) => {
   }
 };
 
+const getDetails = async (req, res, next) => {
+  try {
+    const params = req.params;
+    const { id: boardId } = params;
+    const detailBoard = await boardService.getDetails(boardId);
+
+    res.status(StatusCodes.OK).json(detailBoard);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 export const boardController = {
   createNew,
-  getDetail,
-  deleteId
+  deleteId,
+  getDetails
 };

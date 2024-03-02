@@ -5,6 +5,8 @@
  */
 import { slugify } from '~/utils/formatters';
 import { boardModel } from '~/models/boardModel';
+import { StatusCodes } from 'http-status-codes';
+import ApiError from '~/utils/ApiError';
 
 const createNew = async (reqBody) => {
   try {
@@ -23,15 +25,21 @@ const createNew = async (reqBody) => {
   }
 };
 
-const getDetail = async (boardId) => {
+const getDetails = async (boardId) => {
   try {
+    console.log('boardId: ', boardId);
     // tra ve object detail moi vua tao
-    return await boardModel.findOneById(boardId);
+    const boardDetails = await boardModel.getDetails(boardId);
+    console.log('boardDetails: ', boardDetails);
+    if (!boardDetails) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found');
+    }
+    return boardDetails;
   } catch (error) {
     throw error;
   }
 };
 export const boardService = {
   createNew,
-  getDetail
+  getDetails
 };

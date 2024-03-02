@@ -46,6 +46,14 @@ const findOneById = async (id) => {
   }
 };
 
+const getDetails = async (id) => {
+  try {
+    return await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const deleteBoard = async (id) => {
   try {
     return await GET_DB().collection(BOARD_COLLECTION_NAME).delete({ id });
@@ -59,5 +67,6 @@ export const boardModel = {
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
+  getDetails,
   deleteBoard
 };

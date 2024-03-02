@@ -19,5 +19,7 @@ Router.route('/')
   .post(boardValidation.createNew, boardController.createNew);
 
 Router.route('/:id')
-  .delete(boardValidation.deleteId, boardController.deleteId)
+  .get(boardValidation.getDetails, boardController.getDetails)
+  .delete(boardValidation.deleteId, boardController.deleteId);
+
 export const boardRoutes = Router;
