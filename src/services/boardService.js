@@ -4,6 +4,7 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 import { slugify } from '~/utils/formatters';
+import { boardModel } from '~/models/boardModel';
 
 const createNew = async (reqBody) => {
   try {
@@ -13,12 +14,24 @@ const createNew = async (reqBody) => {
       slug: slugify(reqBody?.title)
     };
 
-    return newObject;
+    const createdObject = await boardModel.createNew(newObject);
+
+    // tra ve object detail moi vua tao
+    return await boardModel.findOneById(createdObject.insertedId);
   } catch (error) {
     throw error;
   }
 };
 
+const getDetail = async (boardId) => {
+  try {
+    // tra ve object detail moi vua tao
+    return await boardModel.findOneById(boardId);
+  } catch (error) {
+    throw error;
+  }
+};
 export const boardService = {
-  createNew
+  createNew,
+  getDetail
 };

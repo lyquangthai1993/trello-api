@@ -13,10 +13,11 @@ const Router = express.Router();
 Router.route('/')
   .get((req, res) => {
     res.status(StatusCodes.OK).json({
-      messge: 'API GET LIST BOARDS'
+      message: 'API GET LIST BOARDS'
     });
   })
   .post(boardValidation.createNew, boardController.createNew);
 
-
+Router.route('/:id')
+  .delete(boardValidation.deleteId, boardController.deleteId)
 export const boardRoutes = Router;

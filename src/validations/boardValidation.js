@@ -16,7 +16,6 @@ const createNew = async (req, res, next) => {
     description: Joi.string().required().min(3).max(256).trim().strict()
   });
 
-
   try {
     await correctCondition.validateAsync(req.body, {
       abortEarly: false
@@ -29,6 +28,18 @@ const createNew = async (req, res, next) => {
   }
 };
 
+const deleteId = async (req, res, next) => {
+
+  try {
+
+    //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
+    next();
+  } catch (error) {
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+  }
+};
+
 export const boardValidation = {
-  createNew
+  createNew,
+  deleteId
 };
