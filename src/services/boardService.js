@@ -7,8 +7,10 @@ import { slugify } from '~/utils/formatters';
 import { boardModel } from '~/models/boardModel';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '~/utils/ApiError';
+import { cloneDeep } from 'lodash';
 
 const createNew = async (reqBody) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     // xử lí logic dữ liệu liệu
     const newObject = {
@@ -26,15 +28,26 @@ const createNew = async (reqBody) => {
 };
 
 const getDetails = async (boardId) => {
+  // eslint-disable-next-line no-useless-catch
   try {
-    console.log('boardId: ', boardId);
     // tra ve object detail moi vua tao
     const boardDetails = await boardModel.getDetails(boardId);
-    console.log('boardDetails: ', boardDetails);
+
     if (!boardDetails) {
+      // noinspection ExceptionCaughtLocallyJS
       throw new ApiError(StatusCodes.NOT_FOUND, 'Board not found');
     }
-    return boardDetails;
+
+    const resBoard = cloneDeep(boardDetails);
+
+    resBoard.columns.forEach(column => {
+      column.cards = resBoard.cards.filter(card => card.columnId.equals(column._id));
+    });
+
+
+    delete resBoard.cards;
+
+    return resBoard;
   } catch (error) {
     throw error;
   }

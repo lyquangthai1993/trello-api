@@ -7,6 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import ApiError from '~/utils/ApiError';
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators';
+import { BOARD_TYPE } from '~/utils/constants';
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -14,7 +15,8 @@ const createNew = async (req, res, next) => {
       'any.required': 'This field is required',
       'string.empty': 'This filed cannot be empty'
     }),
-    description: Joi.string().required().min(3).max(256).trim().strict()
+    description: Joi.string().required().min(3).max(256).trim().strict(),
+    type: Joi.string().valid(BOARD_TYPE.PUBLIC, BOARD_TYPE.PRIVATE).required()
   });
 
   try {
