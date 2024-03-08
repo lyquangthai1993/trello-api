@@ -12,5 +12,5 @@ export const env = {
   APP_HOST: process.env.APP_HOST,
   APP_PORT: process.env.APP_PORT,
   BUILD_MODE: process.env.BUILD_MODE,
-  WHITELIST_DOMAINS: process.env.WHITELIST_DOMAINS.split(',')
+  WHITELIST_DOMAINS: process.env.WHITELIST_DOMAINS ? process.env.WHITELIST_DOMAINS.split(',') : ''
 };
