@@ -20,6 +20,7 @@ Router.route('/')
 
 Router.route('/:id')
   .get(boardValidation.getDetails, boardController.getDetails)
+  .put(boardValidation.update, boardController.update)
   .delete(boardValidation.deleteId, boardController.deleteId);
 
 export const boardRoutes = Router;

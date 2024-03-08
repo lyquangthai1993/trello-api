@@ -29,7 +29,7 @@ const deleteId = async (req, res, next) => {
   }
 };
 
-const getDetails = async (req, res, next) => {
+const getDetail = async (req, res, next) => {
   try {
     const params = req.params;
     const { id: columnId } = params;
@@ -43,5 +43,7 @@ const getDetails = async (req, res, next) => {
 
 
 export const columnController = {
-  createNew
+  createNew,
+  deleteId,
+  getDetail
 };

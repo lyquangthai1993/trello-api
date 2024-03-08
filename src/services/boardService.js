@@ -1,5 +1,5 @@
 /**
- * Updated by trungquandev.com's author on August 17 2023
+ * Updated by trungquandev.com's author on August 17-2023
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
@@ -12,7 +12,7 @@ import { cloneDeep } from 'lodash';
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    // xử lí logic dữ liệu liệu
+    // xử lí logic dữ liệu
     const newObject = {
       ...reqBody,
       slug: slugify(reqBody?.title)
@@ -22,6 +22,20 @@ const createNew = async (reqBody) => {
 
     // tra ve object detail moi vua tao
     return await boardModel.findOneById(createdObject.insertedId);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const update = async (boardId, reqBody) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const updateData = {
+      ...reqBody,
+      updateAt: Date.now()
+    };
+
+    return await boardModel.update(boardId, updateData);
   } catch (error) {
     throw error;
   }
@@ -54,5 +68,6 @@ const getDetails = async (boardId) => {
 };
 export const boardService = {
   createNew,
+  update,
   getDetails
 };

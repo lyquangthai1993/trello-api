@@ -31,6 +31,30 @@ const createNew = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  // truong hop update nen khong can dung required()
+  const correctCondition = Joi.object({
+    title: Joi.string().min(3).max(50).trim().strict(),
+    description: Joi.string().min(3).max(256).trim().strict(),
+    type: Joi.string().valid(BOARD_TYPE.PUBLIC, BOARD_TYPE.PRIVATE),
+
+    columnOrderIds: Joi.array().items(
+      Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+    ).default([])
+  });
+
+  try {
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true
+    });
+
+    next();
+  } catch (error) {
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+  }
+};
+
 const deleteId = async (req, res, next) => {
   const correctCondition = Joi.object({
     id: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
@@ -64,5 +88,6 @@ const getDetails = async (req, res, next) => {
 export const boardValidation = {
   createNew,
   getDetails,
-  deleteId
+  deleteId,
+  update
 };

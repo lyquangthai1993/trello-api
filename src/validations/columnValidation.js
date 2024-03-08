@@ -7,7 +7,6 @@ import { StatusCodes } from 'http-status-codes';
 import Joi from 'joi';
 import ApiError from '~/utils/ApiError';
 import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators';
-import { BOARD_TYPE } from '~/utils/constants';
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({

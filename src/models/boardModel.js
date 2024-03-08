@@ -28,6 +28,9 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 });
 
+// chi dinh nhung truong nao khong su dung trong ham update
+const INVALID_UPDATE_FIELDS = ['_id', 'createdAt'];
+
 const validateBeforeCreate = async (data) => {
   return await BOARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false });
 };
@@ -45,6 +48,28 @@ const createNew = async (data) => {
 const findOneById = async (id) => {
   try {
     return await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const update = async (boardId, updateData) => {
+  try {
+    INVALID_UPDATE_FIELDS.map(fieldName => {
+      delete updateData[fieldName];
+    });
+
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(boardId) },
+      {
+        $set: updateData
+      },
+      { returnDocument: 'after' }
+    );
+
+    console.log('update----board model------', result);
+    return result;
+
   } catch (error) {
     throw new Error(error);
   }
@@ -91,7 +116,7 @@ const deleteBoard = async (id) => {
   }
 };
 
-// nhiem vu ham nay la push 1 columnId vao cuoi mang columnorderIds
+// nhiem vu ham nay la push 1 columnId vao cuoi mang columnOrderIds
 const pushColumnOrderIds = async (column) => {
   try {
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
@@ -102,17 +127,18 @@ const pushColumnOrderIds = async (column) => {
       { returnDocument: 'after' }
     );
 
-    return result.value;
+    console.log('pushColumnOrderIds----------', result);
+    return result;
 
   } catch (error) {
     throw new Error(error);
   }
 };
-
 export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
+  update,
   findOneById,
   getDetails,
   deleteBoard,
