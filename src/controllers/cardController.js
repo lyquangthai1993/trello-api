@@ -41,9 +41,22 @@ const getDetails = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const params = req.params;
+    const { id: cardId } = params;
+    const updatedBoard = await cardService.update(cardId, req.body);
+
+    res.status(StatusCodes.OK).json(updatedBoard);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 export const cardController = {
   createNew,
+  update,
   deleteId,
   getDetails
 };
