@@ -23,4 +23,6 @@ Router.route('/:id')
   .put(boardValidation.update, boardController.update)
   .delete(boardValidation.deleteId, boardController.deleteId);
 
+Router.route('/supports/moving_card')
+  .put(boardValidation.moveCardToDifferent, boardController.moveCardToDifferent);
 export const boardRoutes = Router;

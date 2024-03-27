@@ -10,7 +10,8 @@ import { cardController } from '~/controllers/cardController';
 const Router = express.Router();
 
 Router.route('/')
-  .post(cardValidation.createNew, cardController.createNew);
+  .post(cardValidation.createNew, cardController.createNew)
+  .delete(cardValidation.deleteId, cardController.deleteId);
 
 Router.route('/:id')
   .put(cardValidation.update, cardController.update);

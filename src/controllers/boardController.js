@@ -26,6 +26,16 @@ const update = async (req, res, next) => {
   }
 };
 
+const moveCardToDifferent = async (req, res, next) => {
+  try {
+    const result = await boardService.moveCardToDifferent(req.body);
+
+    res.status(StatusCodes.OK).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteId = async (req, res, next) => {
   try {
     const params = req.params;
@@ -58,5 +68,6 @@ export const boardController = {
   createNew,
   update,
   deleteId,
-  getDetails
+  getDetails,
+  moveCardToDifferent
 };

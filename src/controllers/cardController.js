@@ -22,7 +22,6 @@ const deleteId = async (req, res, next) => {
 
     console.log('deleteId-----', cardDetail);
 
-
     res.status(StatusCodes.OK).json(cardDetail);
   } catch (error) {
     next(error);

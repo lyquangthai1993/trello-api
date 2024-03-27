@@ -8,6 +8,8 @@ import { boardModel } from '~/models/boardModel';
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '~/utils/ApiError';
 import { cloneDeep } from 'lodash';
+import { columnModel } from '~/models/columnModel';
+import { cardModel } from '~/models/cardModel';
 
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
@@ -41,6 +43,33 @@ const update = async (boardId, reqBody) => {
   }
 };
 
+const moveCardToDifferent = async (reqBody) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    // B1: cập nhật mảng cardOrderIds của column cũ
+    await columnModel.update(reqBody?.prevColumnId, {
+      cardOrderIds: reqBody?.prevCardOrderIds,
+      updatedAt: Date.now()
+    });
+
+    // B2: cập nhật mảng cardOrderIds của column mới
+    await columnModel.update(reqBody?.nextColumnId, {
+      cardOrderIds: reqBody?.nextCardOrderIds,
+      updatedAt: Date.now()
+    });
+
+    // B3: cập nhật lại trường columnId của card mới move vào
+    await cardModel.update(reqBody?.currentCardId, {
+      columnId: reqBody?.nextColumnId,
+      updatedAt: Date.now()
+    });
+
+    return { updateResult: 'success' };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getDetails = async (boardId) => {
   // eslint-disable-next-line no-useless-catch
   try {
@@ -69,5 +98,6 @@ const getDetails = async (boardId) => {
 export const boardService = {
   createNew,
   update,
-  getDetails
+  getDetails,
+  moveCardToDifferent
 };
