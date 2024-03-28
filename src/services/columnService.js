@@ -5,6 +5,9 @@
  */
 import { columnModel } from '~/models/columnModel';
 import { boardModel } from '~/models/boardModel';
+import { cardModel } from '~/models/cardModel';
+import { StatusCodes } from 'http-status-codes';
+import ApiError from '~/utils/ApiError';
 
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
@@ -44,7 +47,37 @@ const update = async (columnId, reqBody) => {
     throw error;
   }
 };
+
+const deleteId = async (columnId) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const targetColumn = await columnModel.findOneById(columnId);
+    console.log('deleteId resColumn: ', targetColumn);
+
+    if (!targetColumn) {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Column not found!');
+    }
+
+    // B1: Remove cac cards ma co columnId, change _destroy = true
+    await cardModel.removeByColumnId(columnId);
+
+    // B2: Remove column voi columnId
+    await columnModel.deleteId(columnId);
+
+    // B3: cập nhật lại mảng columnOrderIds trong collections boards, remove columnId ra khoi columnOrderIds
+    await boardModel.pullColumnOrderIds(targetColumn);
+
+    return {
+      message: 'Column and its Card(s) is deleted successfully!',
+      result: true
+    };
+
+  } catch (error) {
+    throw error;
+  }
+};
 export const columnService = {
   createNew,
-  update
+  update,
+  deleteId
 };

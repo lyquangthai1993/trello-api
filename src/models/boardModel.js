@@ -89,6 +89,13 @@ const getDetails = async (id) => {
           from: columnModel.COLUMN_COLLECTION_NAME,
           localField: '_id',
           foreignField: 'boardId',
+          pipeline: [
+            {
+              $match: {
+                _destroy: false
+              }
+            }
+          ],
           as: 'columns'
         }
       },
@@ -97,6 +104,13 @@ const getDetails = async (id) => {
           from: cardModel.CARD_COLLECTION_NAME,
           localField: '_id',
           foreignField: 'boardId',
+          pipeline: [
+            {
+              $match: {
+                _destroy: false
+              }
+            }
+          ],
           as: 'cards'
         }
       }
@@ -134,6 +148,25 @@ const pushColumnOrderIds = async (column) => {
     throw new Error(error);
   }
 };
+
+// nhiem vu ham nay la pull(lay ra) 1 columnId ra khoi mang columnOrderIds
+const pullColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(column.boardId) },
+      {
+        $pull: { columnOrderIds: new ObjectId(column._id) }
+      },
+      { returnDocument: 'after' }
+    );
+
+    console.log('pushColumnOrderIds----------', result);
+    return result;
+
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
@@ -142,5 +175,6 @@ export const boardModel = {
   findOneById,
   getDetails,
   deleteBoard,
-  pushColumnOrderIds
+  pushColumnOrderIds,
+  pullColumnOrderIds
 };

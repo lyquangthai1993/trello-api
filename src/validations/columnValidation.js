@@ -28,12 +28,10 @@ const createNew = async (req, res, next) => {
 
 const deleteId = async (req, res, next) => {
   const correctCondition = Joi.object({
-    id: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+    id: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
   });
   try {
-    await correctCondition.validateAsync(req.params, {
-      abortEarly: false
-    });
+    await correctCondition.validateAsync(req.params);
     //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
     next();
   } catch (error) {

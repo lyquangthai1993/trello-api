@@ -18,7 +18,7 @@ const deleteId = async (req, res, next) => {
   try {
     const params = req.params;
     const { id: columnId } = params;
-    const columnDetail = await columnService.getDetail(columnId);
+    const columnDetail = await columnService.deleteId(columnId);
 
     console.log('deleteId-----', columnDetail);
 

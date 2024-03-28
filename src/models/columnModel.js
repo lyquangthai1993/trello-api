@@ -90,11 +90,29 @@ const update = async (columnId, updateData) => {
   }
 };
 
+const deleteId = async (columnId) => {
+  try {
+    const result = await GET_DB().collection(COLUMN_COLLECTION_NAME).findOneAndUpdate(
+      { _id: new ObjectId(columnId) },
+      {
+        $set: { _destroy: true }
+      },
+      { returnDocument: 'after' }
+    );
+
+    return result || null;
+
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const columnModel = {
   COLUMN_COLLECTION_NAME,
   COLUMN_COLLECTION_SCHEMA,
   createNew,
   findOneById,
   pushCardOrderIds,
-  update
+  update,
+  deleteId
 };
