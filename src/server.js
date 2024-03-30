@@ -14,7 +14,6 @@ import { APIs_V1 } from '~/routes/v1';
 import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware';
 import { corsOptions } from '~/config/cors';
 
-
 const START_SERVER = () => {
   const app = express();
 
