@@ -52,7 +52,6 @@ const deleteId = async (columnId) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const targetColumn = await columnModel.findOneById(columnId);
-    console.log('deleteId resColumn: ', targetColumn);
 
     if (!targetColumn) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Column not found!');

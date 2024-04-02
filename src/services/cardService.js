@@ -17,7 +17,6 @@ const createNew = async (reqBody) => {
     const createdObject = await cardModel.createNew(newObject);
     const newCreatedObject = await cardModel.findOneById(createdObject.insertedId);
 
-    console.log('------newCreatedObject----', newCreatedObject);
     if (newCreatedObject) {
       await columnModel.pushCardOrderIds(newCreatedObject);
     }

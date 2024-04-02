@@ -20,8 +20,6 @@ const deleteId = async (req, res, next) => {
     const { id: cardId } = params;
     const cardDetail = await cardService.getDetail(cardId);
 
-    console.log('deleteId-----', cardDetail);
-
     res.status(StatusCodes.OK).json(cardDetail);
   } catch (error) {
     next(error);

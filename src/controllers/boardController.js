@@ -42,9 +42,6 @@ const deleteId = async (req, res, next) => {
     const { id: boardId } = params;
     const boardDetail = await boardService.getDetails(boardId);
 
-    console.log('deleteId-----', boardDetail);
-
-
     res.status(StatusCodes.OK).json(boardDetail);
   } catch (error) {
     next(error);

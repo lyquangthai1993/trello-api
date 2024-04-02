@@ -20,9 +20,6 @@ const deleteId = async (req, res, next) => {
     const { id: columnId } = params;
     const columnDetail = await columnService.deleteId(columnId);
 
-    console.log('deleteId-----', columnDetail);
-
-
     res.status(StatusCodes.OK).json(columnDetail);
   } catch (error) {
     next(error);

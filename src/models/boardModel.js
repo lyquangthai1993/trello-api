@@ -67,7 +67,6 @@ const update = async (boardId, updateData) => {
       { returnDocument: 'after' }
     );
 
-    console.log('update----board model------', result);
     return result;
 
   } catch (error) {
@@ -115,7 +114,6 @@ const getDetails = async (id) => {
         }
       }
     ]).toArray();
-    // console.log('result', result);
     return result[0] || null;
   } catch (error) {
     throw new Error(error);
@@ -141,7 +139,6 @@ const pushColumnOrderIds = async (column) => {
       { returnDocument: 'after' }
     );
 
-    console.log('pushColumnOrderIds----------', result);
     return result;
 
   } catch (error) {
@@ -160,7 +157,6 @@ const pullColumnOrderIds = async (column) => {
       { returnDocument: 'after' }
     );
 
-    console.log('pushColumnOrderIds----------', result);
     return result;
 
   } catch (error) {

@@ -68,7 +68,6 @@ const update = async (cardId, updateData) => {
       { returnDocument: 'after' }
     );
 
-    console.log('update----board model------', result);
     return result;
 
   } catch (error) {

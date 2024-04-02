@@ -82,7 +82,6 @@ const update = async (columnId, updateData) => {
       { returnDocument: 'after' }
     );
 
-    console.log('update----board model------', result);
     return result;
 
   } catch (error) {
