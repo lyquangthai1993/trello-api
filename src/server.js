@@ -22,13 +22,9 @@ const START_SERVER = () => {
 
 
   const hostname = env.APP_HOST;
-  const port = env.APP_PORT;
+  let port = env.APP_PORT;
 
   app.get('/', async (req, res) => {
-
-    // Test Absolute import mapOrder
-    // console.log(mapOrder([{ id: 'id-1', name: 'One' }, { id: 'id-2', name: 'Two' }, { id: 'id-3', name: 'Three' }, { id: 'id-4', name: 'Four' }, { id: 'id-5', name: 'Five' }], ['id-5', 'id-4', 'id-2', 'id-3', 'id-1'], 'id'))
-
     res.end(`<h1>Hello World ${env.AUTHOR}!</h1><hr>`);
   });
 
@@ -37,10 +33,21 @@ const START_SERVER = () => {
   // middleware handle error
   app.use(errorHandlingMiddleware);
 
-  app.listen(port, hostname, () => {
+  if (env.BUILD_MODE === 'dev') {
+    port = env.APP_PORT;
 
-    console.log(`3. Server is running at http://${hostname}:${port}/`);
-  });
+    app.listen(port, hostname, () => {
+      console.log(`3. Server is running at dev at http://${hostname}:${port}/`);
+    });
+  }
+
+  // production thì sẽ tự thêm port trên server
+  if (env.BUILD_MODE === 'production') {
+    app.listen(process.env.PORT, () => {
+      console.log(`3. Server is running at production at port: ${process.env.PORT}`);
+    });
+  }
+
 
   exitHook(async () => {
     console.log('4. Closing connect MongoDB ');
