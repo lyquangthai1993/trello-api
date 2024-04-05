@@ -2,6 +2,9 @@ import Joi from 'joi';
 import { GET_DB } from '~/config/mongodb';
 import { ObjectId } from 'mongodb';
 import bscrypt from 'bcrypt';
+import { checkMissData } from '~/utils/constants';
+import ApiError from '~/utils/ApiError';
+import { StatusCodes } from 'http-status-codes';
 
 // const INVALID_UPDATE_FIELDS = ['_id', 'createdAt'];
 
@@ -18,10 +21,6 @@ const COLLECTION_SCHEMA = Joi.object({
   _destroy: Joi.boolean().default(false)
 });
 
-function checkData(data, message = 'Missing data') {
-  if (!data) throw Error(message);
-}
-
 const validateBeforeCreate = async (data) => {
   return await COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false });
 };
@@ -33,7 +32,7 @@ const createNew = async (data) => {
     const validData = await validateBeforeCreate(data);
     const hasEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email });
 
-    checkData(hasEmail, 'Email already exists');
+    checkMissData(hasEmail, 'Email already exists');
 
     return await GET_DB().collection(COLLECTION_NAME).insertOne({
       ...validData
@@ -44,19 +43,22 @@ const createNew = async (data) => {
 };
 
 const authenticate = async (data) => {
-  try {
-    const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email });
 
-    checkData(userFoundByEmail, 'User not found');
+  const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email });
 
-    const isPasswordMatch = bscrypt.compareSync(data.password, userFoundByEmail.password);
-
-    checkData(isPasswordMatch, 'Password not match');
-
-    return userFoundByEmail;
-  } catch (error) {
-    throw new Error(error);
+  if (!userFoundByEmail) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Email not found');
   }
+
+  const isPasswordMatch = bscrypt.compareSync(data.password, userFoundByEmail.password);
+  console.log('isPasswordMatch = ', isPasswordMatch);
+
+  if (!isPasswordMatch) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Password is incorrect');
+  }
+
+  return userFoundByEmail;
+
 };
 
 const findOneById = async (id) => {
