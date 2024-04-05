@@ -34,9 +34,13 @@ const createNew = async (data) => {
 
 const authenticate = async (data) => {
   try {
-    return await GET_DB().collection(COLLECTION_NAME).findOne({
+    const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({
       email: data.email
     });
+
+    if (!userFoundByEmail) {
+      throw new Error('Email or password is incorrect');
+    }
   } catch (error) {
     throw new Error(error);
   }
