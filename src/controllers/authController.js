@@ -1,11 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import { authService } from '~/services/authService';
-import ApiError from '~/utils/ApiError';
 
 const createNew = async (req, res, next) => {
   try {
     // điều hướng dữ liệu sang tầng service
-
     const createdBoard = await authService.createNew(req.body);
 
     // kết quả về phía client
@@ -42,12 +40,10 @@ const getDetails = async (req, res, next) => {
 
 const authenticate = async (req, res, next) => {
   try {
-    console.log('Class: , Function: authenticate, Line 44 (): ', req.body);
     const account = await authService.authenticate(req.body);
     if (account) {
       res.status(StatusCodes.OK).json(account);
     }
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Email or password is incorrect');
 
   } catch (error) {
     next(error);
