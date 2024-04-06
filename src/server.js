@@ -6,16 +6,15 @@ import cors from 'cors'
 import { CLOSE_DB, CONNECT_DB } from '~/config/mongodb'
 import { env } from '~/config/environment'
 import { APIs_V1 } from '~/routes/v1'
-// import { mapOrder } from '~/utils/sorts.js';
 import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware'
 import { corsOptions } from '~/config/cors'
 
 const START_SERVER = () => {
   const app = express()
+  // const protectedRouter = express.Router()
 
   app.use(cors(corsOptions))
   app.use(express.json())
-
 
   const hostname = env.APP_HOST
   let port = env.APP_PORT

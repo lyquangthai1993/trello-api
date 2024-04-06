@@ -46,24 +46,25 @@ const authenticate = async (data) => {
   const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email }) || {}
 
   if (isEmpty(userFoundByEmail)) {
-    userFoundByEmail.result = false
-    userFoundByEmail.fields = {
+    const tempObject = {}
+    tempObject.result = false
+    tempObject.fields = {
       email: 'Email not found'
     }
 
-    return userFoundByEmail
+    return tempObject
   }
 
   const isPasswordMatch = bscrypt.compareSync(data.password, userFoundByEmail.password)
 
   if (!isPasswordMatch) {
-    // throw new ApiError(StatusCodes.UNAUTHORIZED, 'Password is incorrect')
-    userFoundByEmail.result = false
-    userFoundByEmail.fields = {
+    const tempObject = {}
+    tempObject.result = false
+    tempObject.fields = {
       password: 'Password is incorrect'
     }
 
-    return userFoundByEmail
+    return tempObject
   }
 
   userFoundByEmail.result = true
