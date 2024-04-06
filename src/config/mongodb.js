@@ -3,15 +3,15 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import { env } from '~/config/environment';
+import { env } from '~/config/environment'
 
-const MONGODB_URI = env.MONGODB_URI;
+const MONGODB_URI = env.MONGODB_URI
 
-const DATABASE_NAME = env.DATABASE_NAME;
+const DATABASE_NAME = env.DATABASE_NAME
 
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb'
 
-let trelloDatabaseInstance = null;
+let trelloDatabaseInstance = null
 
 const mongoClientInstance = new MongoClient(MONGODB_URI, {
   // serverApi có từ phiên bản 5.0.0 trở lên, có thể không cần dùng nó để kết nối
@@ -20,23 +20,23 @@ const mongoClientInstance = new MongoClient(MONGODB_URI, {
     strict: true,
     deprecationErrors: true
   }
-});
+})
 
 export const CONNECT_DB = async () => {
-  await mongoClientInstance.connect();
+  await mongoClientInstance.connect()
 
-  trelloDatabaseInstance = mongoClientInstance.db(DATABASE_NAME);
-};
+  trelloDatabaseInstance = mongoClientInstance.db(DATABASE_NAME)
+}
 
 export const GET_DB = () => {
   if (!trelloDatabaseInstance) {
-    throw new Error('Must connect to DB First');
+    throw new Error('Must connect to DB First')
   }
 
-  return trelloDatabaseInstance;
-};
+  return trelloDatabaseInstance
+}
 
 
 export const CLOSE_DB = async () => {
-  await mongoClientInstance.close();
-};
+  await mongoClientInstance.close()
+}

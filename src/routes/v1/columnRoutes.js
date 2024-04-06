@@ -3,17 +3,17 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import express from 'express';
-import { columnValidation } from '~/validations/columnValidation';
-import { columnController } from '~/controllers/columnController';
+import express from 'express'
+import { columnValidation } from '~/validations/columnValidation'
+import { columnController } from '~/controllers/columnController'
 
-const Router = express.Router();
+const Router = express.Router()
 
 Router.route('/')
-  .post(columnValidation.createNew, columnController.createNew);
+  .post(columnValidation.createNew, columnController.createNew)
 
 Router.route('/:id')
   .put(columnValidation.update, columnController.update)
-  .delete(columnValidation.deleteId, columnController.deleteId);
+  .delete(columnValidation.deleteId, columnController.deleteId)
 
-export const columnRoutes = Router;
+export const columnRoutes = Router

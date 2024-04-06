@@ -1,25 +1,25 @@
-import { StatusCodes } from 'http-status-codes';
-import Joi from 'joi';
-import ApiError from '~/utils/ApiError';
+import { StatusCodes } from 'http-status-codes'
+import Joi from 'joi'
+import ApiError from '~/utils/ApiError'
 
 const sendEmail = async (req, res, next) => {
   const correctCondition = Joi.object({
     to_email: Joi.string().email().required()
-  });
+  })
 
   try {
     await correctCondition.validateAsync(req.body, {
       abortEarly: false
-    });
+    })
 
     //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
-    next();
+    next()
   } catch (error) {
-    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
   }
-};
+}
 
 
 export const emailValidation = {
   sendEmail
-};
+}

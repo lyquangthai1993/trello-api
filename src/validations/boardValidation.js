@@ -3,11 +3,11 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import { StatusCodes } from 'http-status-codes';
-import Joi from 'joi';
-import ApiError from '~/utils/ApiError';
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators';
-import { BOARD_TYPE } from '~/utils/constants';
+import { StatusCodes } from 'http-status-codes'
+import Joi from 'joi'
+import ApiError from '~/utils/ApiError'
+import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
+import { BOARD_TYPE } from '~/utils/constants'
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -17,19 +17,19 @@ const createNew = async (req, res, next) => {
     }),
     description: Joi.string().required().min(3).max(256).trim().strict(),
     type: Joi.string().valid(BOARD_TYPE.PUBLIC, BOARD_TYPE.PRIVATE).required()
-  });
+  })
 
   try {
     await correctCondition.validateAsync(req.body, {
       abortEarly: false
-    });
+    })
 
     //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
-    next();
+    next()
   } catch (error) {
-    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
   }
-};
+}
 
 const update = async (req, res, next) => {
   // truong hop update nen khong can dung required()
@@ -41,19 +41,19 @@ const update = async (req, res, next) => {
     columnOrderIds: Joi.array().items(
       Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
     ).default([])
-  });
+  })
 
   try {
     await correctCondition.validateAsync(req.body, {
       abortEarly: false,
       allowUnknown: true
-    });
+    })
 
-    next();
+    next()
   } catch (error) {
-    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
   }
-};
+}
 
 const moveCardToDifferent = async (req, res, next) => {
   const correctCondition = Joi.object({
@@ -66,48 +66,48 @@ const moveCardToDifferent = async (req, res, next) => {
     nextCardOrderIds: Joi.array().required().items(
       Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
     ).default([])
-  });
+  })
 
   try {
     await correctCondition.validateAsync(req.body, {
       abortEarly: false
-    });
+    })
 
-    next();
+    next()
   } catch (error) {
-    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
   }
-};
+}
 
 const deleteId = async (req, res, next) => {
   const correctCondition = Joi.object({
     id: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
-  });
+  })
   try {
     await correctCondition.validateAsync(req.params, {
       abortEarly: false
-    });
+    })
     //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
-    next();
+    next()
   } catch (error) {
-    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
   }
-};
+}
 
 const getDetails = async (req, res, next) => {
   const correctCondition = Joi.object({
     id: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
-  });
+  })
   try {
     await correctCondition.validateAsync(req.params, {
       abortEarly: false
-    });
+    })
     //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
-    next();
+    next()
   } catch (error) {
-    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message));
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
   }
-};
+}
 
 export const boardValidation = {
   createNew,
@@ -115,4 +115,4 @@ export const boardValidation = {
   deleteId,
   update,
   moveCardToDifferent
-};
+}

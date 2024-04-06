@@ -3,17 +3,17 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import express from 'express';
-import { cardValidation } from '~/validations/cardValidation';
-import { cardController } from '~/controllers/cardController';
+import express from 'express'
+import { cardValidation } from '~/validations/cardValidation'
+import { cardController } from '~/controllers/cardController'
 
-const Router = express.Router();
+const Router = express.Router()
 
 Router.route('/')
   .post(cardValidation.createNew, cardController.createNew)
-  .delete(cardValidation.deleteId, cardController.deleteId);
+  .delete(cardValidation.deleteId, cardController.deleteId)
 
 Router.route('/:id')
-  .put(cardValidation.update, cardController.update);
+  .put(cardValidation.update, cardController.update)
 
-export const cardRoutes = Router;
+export const cardRoutes = Router

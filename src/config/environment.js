@@ -3,7 +3,7 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import 'dotenv/config';
+import 'dotenv/config'
 
 export const env = {
   AUTHOR: process.env.AUTHOR,
@@ -15,4 +15,4 @@ export const env = {
   EMAIL_DOMAIN: process.env.EMAIL_DOMAIN,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
   WHITELIST_DOMAINS: process.env.WHITELIST_DOMAINS ? process.env.WHITELIST_DOMAINS.split(',') : ''
-};
+}
