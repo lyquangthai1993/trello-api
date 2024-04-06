@@ -47,7 +47,7 @@ const authenticate = async (req, res, next) => {
     if (account.result) {
       res.status(StatusCodes.OK).json(account)
     } else {
-      res.status(StatusCodes.NOT_FOUND).json(account)
+      res.status(StatusCodes.UNAUTHORIZED).json(account)
     }
 
   } catch (error) {

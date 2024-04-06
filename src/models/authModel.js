@@ -3,8 +3,6 @@ import { GET_DB } from '~/config/mongodb'
 import { ObjectId } from 'mongodb'
 import bscrypt from 'bcrypt'
 import { checkMissData } from '~/utils/constants'
-import ApiError from '~/utils/ApiError'
-import { StatusCodes } from 'http-status-codes'
 import { isEmpty } from 'lodash'
 // const INVALID_UPDATE_FIELDS = ['_id', 'createdAt'];
 
@@ -46,11 +44,8 @@ const createNew = async (data) => {
 
 const authenticate = async (data) => {
   const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email }) || {}
-  console.log('🚀 ~ authenticate ~ userFoundByEmail:', userFoundByEmail)
-
 
   if (isEmpty(userFoundByEmail)) {
-    // throw new ApiError(StatusCodes.UNAUTHORIZED, 'Email not found')
     userFoundByEmail.result = false
     userFoundByEmail.fields = {
       email: 'Email not found'
@@ -60,7 +55,6 @@ const authenticate = async (data) => {
   }
 
   const isPasswordMatch = bscrypt.compareSync(data.password, userFoundByEmail.password)
-  console.log('isPasswordMatch = ', isPasswordMatch)
 
   if (!isPasswordMatch) {
     // throw new ApiError(StatusCodes.UNAUTHORIZED, 'Password is incorrect')
