@@ -42,7 +42,7 @@ const authenticate = async (req, res, next) => {
   try {
     const account = await authService.authenticate(req.body)
 
-    console.log('🚀 ~ file: authController.js:45 ~ authenticate ~ account:', account)
+    // console.log('🚀 ~ file: authController.js:45 ~ authenticate ~ account:', account)
 
     if (account.result) {
       res.status(StatusCodes.OK).json(account)

@@ -72,6 +72,7 @@ const authenticate = async (data) => {
     return userFoundByEmail
   }
 
+  userFoundByEmail.result = true
   return userFoundByEmail
 }
 
