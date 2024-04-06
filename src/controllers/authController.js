@@ -41,8 +41,13 @@ const getDetails = async (req, res, next) => {
 const authenticate = async (req, res, next) => {
   try {
     const account = await authService.authenticate(req.body)
-    if (account) {
+
+    console.log('🚀 ~ file: authController.js:45 ~ authenticate ~ account:', account)
+
+    if (account.result) {
       res.status(StatusCodes.OK).json(account)
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json(account)
     }
 
   } catch (error) {

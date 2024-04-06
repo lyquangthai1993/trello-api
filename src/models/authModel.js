@@ -5,7 +5,7 @@ import bscrypt from 'bcrypt'
 import { checkMissData } from '~/utils/constants'
 import ApiError from '~/utils/ApiError'
 import { StatusCodes } from 'http-status-codes'
-
+import { isEmpty } from 'lodash'
 // const INVALID_UPDATE_FIELDS = ['_id', 'createdAt'];
 
 // Define Collection (name & schema)
@@ -34,41 +34,56 @@ const createNew = async (data) => {
 
     checkMissData(hasEmail, 'Email already exists')
 
-    return await GET_DB().collection(COLLECTION_NAME).insertOne({
-      ...validData
-    })
+    return await GET_DB()
+      .collection(COLLECTION_NAME)
+      .insertOne({
+        ...validData
+      })
   } catch (error) {
     throw new Error(error)
   }
 }
 
 const authenticate = async (data) => {
+  const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email }) || {}
+  console.log('🚀 ~ authenticate ~ userFoundByEmail:', userFoundByEmail)
 
-  const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email })
 
-  if (!userFoundByEmail) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Email not found')
+  if (isEmpty(userFoundByEmail)) {
+    // throw new ApiError(StatusCodes.UNAUTHORIZED, 'Email not found')
+    userFoundByEmail.result = false
+    userFoundByEmail.fields = {
+      email: 'Email not found'
+    }
+
+    return userFoundByEmail
   }
 
   const isPasswordMatch = bscrypt.compareSync(data.password, userFoundByEmail.password)
   console.log('isPasswordMatch = ', isPasswordMatch)
 
   if (!isPasswordMatch) {
-    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Password is incorrect')
+    // throw new ApiError(StatusCodes.UNAUTHORIZED, 'Password is incorrect')
+    userFoundByEmail.result = false
+    userFoundByEmail.fields = {
+      password: 'Password is incorrect'
+    }
+
+    return userFoundByEmail
   }
 
   return userFoundByEmail
-
 }
 
 const findOneById = async (id) => {
   try {
-    return await GET_DB().collection(COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
+    return await GET_DB()
+      .collection(COLLECTION_NAME)
+      .findOne({ _id: new ObjectId(id) })
   } catch (error) {
     throw new Error(error)
   }
 }
-
 
 export const authModel = {
   COLLECTION_NAME,
