@@ -4,10 +4,10 @@ import { authService } from '~/services/authService'
 const createNew = async (req, res, next) => {
   try {
     // điều hướng dữ liệu sang tầng service
-    const createdBoard = await authService.createNew(req.body)
+    const createdUser = await authService.createNew(req.body)
 
     // kết quả về phía client
-    res.status(StatusCodes.CREATED).json(createdBoard)
+    res.status(StatusCodes.CREATED).json(createdUser)
   } catch (error) {
     next(error)
   }
@@ -40,14 +40,14 @@ const getDetails = async (req, res, next) => {
 
 const authenticate = async (req, res, next) => {
   try {
-    const account = await authService.authenticate(req.body)
+    const tokenRes = await authService.authenticate(req.body)
 
     // console.log('🚀 ~ file: authController.js:45 ~ authenticate ~ account:', account)
 
-    if (account.result) {
-      res.status(StatusCodes.OK).json(account)
+    if (tokenRes.result) {
+      res.status(StatusCodes.OK).json(tokenRes)
     } else {
-      res.status(StatusCodes.UNAUTHORIZED).json(account)
+      res.status(StatusCodes.UNAUTHORIZED).json(null)
     }
 
   } catch (error) {

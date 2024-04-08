@@ -1,14 +1,16 @@
-// eslint-disable-next-line no-unused-vars
+
 import jwt from 'jsonwebtoken'
 
-export const authHandlingMiddleware = (err, req, res, next) => {
+export const authHandlingMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization
 
   if (authHeader) {
-    const token = authHeader.split(' ')[1]
+    const split = authHeader.split(' ')
+    const prefix = split[0]
+    const token = split[1]
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) {
+      if (err || prefix !== 'Bearer') {
         return res.sendStatus(403)
       }
 
@@ -21,5 +23,5 @@ export const authHandlingMiddleware = (err, req, res, next) => {
 }
 
 export const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN })
 }

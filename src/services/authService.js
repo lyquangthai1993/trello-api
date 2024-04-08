@@ -9,9 +9,7 @@ const createNew = async (reqBody) => {
 const authenticate = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const result = await authModel.authenticate(reqBody)
-    delete result.password
-    return result
+    return await authModel.authenticate(reqBody)
   } catch (error) {
     throw error
   }

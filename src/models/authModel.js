@@ -4,6 +4,9 @@ import { ObjectId } from 'mongodb'
 import bscrypt from 'bcrypt'
 import { checkMissData } from '~/utils/constants'
 import { isEmpty } from 'lodash'
+import jwt from 'jsonwebtoken'
+import { env } from '~/config/environment'
+import { generateAccessToken } from '~/middlewares/authMiddleware'
 // const INVALID_UPDATE_FIELDS = ['_id', 'createdAt'];
 
 // Define Collection (name & schema)
@@ -46,29 +49,27 @@ const authenticate = async (data) => {
   const userFoundByEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email }) || {}
 
   if (isEmpty(userFoundByEmail)) {
-    const tempObject = {}
-    tempObject.result = false
-    tempObject.fields = {
+
+    return {
+      result: false,
       email: 'Email not found'
     }
-
-    return tempObject
   }
 
   const isPasswordMatch = bscrypt.compareSync(data.password, userFoundByEmail.password)
 
   if (!isPasswordMatch) {
-    const tempObject = {}
-    tempObject.result = false
-    tempObject.fields = {
+    return {
+      result: false,
       password: 'Password is incorrect'
     }
-
-    return tempObject
   }
 
-  userFoundByEmail.result = true
-  return userFoundByEmail
+  return {
+    result: true,
+    token: generateAccessToken(userFoundByEmail),
+    refreshToken: jwt.sign(userFoundByEmail, env.REFRESH_TOKEN_SECRET)
+  }
 }
 
 const findOneById = async (id) => {

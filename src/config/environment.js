@@ -14,5 +14,7 @@ export const env = {
   BUILD_MODE: process.env.BUILD_MODE,
   EMAIL_DOMAIN: process.env.EMAIL_DOMAIN,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
-  WHITELIST_DOMAINS: process.env.WHITELIST_DOMAINS ? process.env.WHITELIST_DOMAINS.split(',') : ''
+  WHITELIST_DOMAINS: process.env.WHITELIST_DOMAINS ? process.env.WHITELIST_DOMAINS.split(',') : '',
+  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET
 }
