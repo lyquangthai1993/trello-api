@@ -2,8 +2,20 @@ import { authModel } from '~/models/authModel'
 
 const createNew = async (reqBody) => {
   const createdObject = await authModel.createNew(reqBody)
+  console.log('createNew createdObject = ', createdObject)
+  if (!createdObject.result) {
+    return {
+      ...createdObject,
+      result: !!createdObject.insertedId
+    }
+  }
   // tra ve object detail moi vua tao
-  return await authModel.findOneById(createdObject.insertedId)
+  // const createdUser = await authModel.findOneById(createdObject.insertedId)
+  //
+  // return {
+  //   ...createdUser,
+  //   result: true
+  // }
 }
 //
 const authenticate = async (reqBody) => {

@@ -14,8 +14,18 @@ const COLLECTION_NAME = 'users'
 const COLLECTION_SCHEMA = Joi.object({
   first_name: Joi.string().required().min(1).trim().strict(),
   last_name: Joi.string().required().min(1).trim().strict(),
-  email: Joi.string().required(),
-  password: Joi.string().min(6).required(),
+  email: Joi.string().email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      'string.empty': 'Email is required',
+      'string.email': 'Email must be a valid email address'
+    }),
+  password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,}$'))
+    .required()
+    .messages({
+      'string.pattern.base': 'Password must be at least 6 characters',
+      'string.empty': 'Password is required'
+    }),
 
   createdAt: Joi.date().timestamp('javascript').default(Date.now),
   updatedAt: Joi.date().timestamp('javascript').default(null),
@@ -28,12 +38,16 @@ const validateBeforeCreate = async (data) => {
 
 const createNew = async (data) => {
   try {
-    data.password = bscrypt.hashSync(data.password, 10)
-
     const validData = await validateBeforeCreate(data)
+    validData.password = bscrypt.hashSync(data.password, 10)
     const hasEmail = await GET_DB().collection(COLLECTION_NAME).findOne({ email: data?.email })
 
-    checkMissData(hasEmail, 'Email already exists')
+    if (hasEmail) {
+      return {
+        result: false,
+        fields: { email: 'Email already exists' }
+      }
+    }
 
     return await GET_DB()
       .collection(COLLECTION_NAME)
@@ -52,7 +66,7 @@ const authenticate = async (data) => {
 
     return {
       result: false,
-      email: 'Email not found'
+      fields: { email: 'Email not found' }
     }
   }
 
@@ -61,7 +75,7 @@ const authenticate = async (data) => {
   if (!isPasswordMatch) {
     return {
       result: false,
-      password: 'Password is incorrect'
+      fields: { password: 'Password is incorrect' }
     }
   }
 

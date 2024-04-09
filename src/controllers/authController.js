@@ -5,9 +5,13 @@ const createNew = async (req, res, next) => {
   try {
     // điều hướng dữ liệu sang tầng service
     const createdUser = await authService.createNew(req.body)
+    console.log('createdUser = ', createdUser)
+    if (!createdUser.result) {
+      res.status(StatusCodes.UNAUTHORIZED).json(createdUser)
+    } else {
+      res.status(StatusCodes.CREATED).json(createdUser)
+    }
 
-    // kết quả về phía client
-    res.status(StatusCodes.CREATED).json(createdUser)
   } catch (error) {
     next(error)
   }
@@ -42,12 +46,10 @@ const authenticate = async (req, res, next) => {
   try {
     const tokenRes = await authService.authenticate(req.body)
 
-    // console.log('🚀 ~ file: authController.js:45 ~ authenticate ~ account:', account)
-
     if (tokenRes.result) {
       res.status(StatusCodes.OK).json(tokenRes)
     } else {
-      res.status(StatusCodes.UNAUTHORIZED).json(null)
+      res.status(StatusCodes.UNAUTHORIZED).json(tokenRes)
     }
 
   } catch (error) {
