@@ -5,7 +5,6 @@ const createNew = async (req, res, next) => {
   try {
     // điều hướng dữ liệu sang tầng service
     const createdUser = await authService.createNew(req.body)
-    console.log('createdUser = ', createdUser)
     if (!createdUser.result) {
       res.status(StatusCodes.UNAUTHORIZED).json(createdUser)
     } else {

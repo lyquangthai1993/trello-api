@@ -2,7 +2,6 @@ import { authModel } from '~/models/authModel'
 
 const createNew = async (reqBody) => {
   const createdObject = await authModel.createNew(reqBody)
-  console.log('createNew createdObject = ', createdObject)
   if (!createdObject.result) {
     return {
       ...createdObject,
