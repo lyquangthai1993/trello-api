@@ -5,7 +5,7 @@ const createNew = async (reqBody) => {
   // tra ve object detail moi vua tao
   return await authModel.findOneById(createdObject.insertedId)
 }
-
+//
 const authenticate = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
