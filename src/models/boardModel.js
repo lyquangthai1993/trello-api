@@ -45,6 +45,17 @@ const createNew = async (data) => {
   }
 }
 
+const getList = async (userId) => {
+  try {
+    // console.log('board model userId = ', userId)
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({ owner: new ObjectId(userId) }).toArray()
+    // console.log('result = ', result)
+    return result || []
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 const findOneById = async (id) => {
   try {
     return await GET_DB().collection(BOARD_COLLECTION_NAME).findOne({ _id: new ObjectId(id) })
@@ -161,6 +172,7 @@ export const boardModel = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
+  getList,
   update,
   findOneById,
   getDetails,

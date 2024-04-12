@@ -1,8 +1,3 @@
-/**
- * Updated by trungquandev.com's author on August 17-2023
- * YouTube: https://youtube.com/@trungquandev
- * "A bit of fragrance clings to the hand that gives flowers!"
- */
 import { slugify } from '~/utils/formatters'
 import { boardModel } from '~/models/boardModel'
 import { StatusCodes } from 'http-status-codes'
@@ -10,6 +5,7 @@ import ApiError from '~/utils/ApiError'
 import { cloneDeep } from 'lodash'
 import { columnModel } from '~/models/columnModel'
 import { cardModel } from '~/models/cardModel'
+import jwt from 'jsonwebtoken'
 
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
@@ -24,6 +20,41 @@ const createNew = async (reqBody) => {
 
     // tra ve object detail moi vua tao
     return await boardModel.findOneById(createdObject.insertedId)
+  } catch (error) {
+    throw error
+  }
+}
+
+const getList = async (headersAuthorization) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    // xử lí logic dữ liệu
+    const token = headersAuthorization.split(' ')[1]
+    let authData = {
+      _id: ''
+    }
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, userData) => {
+      // console.log('authData = ', userData)
+      // console.error('err = ', err)
+      if (err) {
+        return {
+          result: false,
+          data: []
+        }
+      } else {
+        authData = userData
+      }
+    })
+
+    const boards = await boardModel.getList(authData._id)
+    // console.log('boards ========== ', boards)
+    // tra ve ket qua
+    return {
+      result: true,
+      data: boards,
+      count: boards.length || 0
+    }
   } catch (error) {
     throw error
   }
@@ -97,6 +128,7 @@ const getDetails = async (boardId) => {
 }
 export const boardService = {
   createNew,
+  getList,
   update,
   getDetails,
   moveCardToDifferent

@@ -14,6 +14,18 @@ const createNew = async (req, res, next) => {
   }
 }
 
+const getList = async (req, res, next) => {
+  try {
+    // điều hướng dữ liệu sang tầng service
+    const boards = await boardService.getList(req.headers.authorization)
+    // console.log('boards = ', boards)
+    // kết quả về phía client
+    res.status(StatusCodes.OK).json(boards)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const update = async (req, res, next) => {
   try {
     const params = req.params
@@ -63,6 +75,7 @@ const getDetails = async (req, res, next) => {
 
 export const boardController = {
   createNew,
+  getList,
   update,
   deleteId,
   getDetails,

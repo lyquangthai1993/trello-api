@@ -2,7 +2,6 @@ import Joi from 'joi'
 import { GET_DB } from '~/config/mongodb'
 import { ObjectId } from 'mongodb'
 import bscrypt from 'bcrypt'
-import { checkMissData } from '~/utils/constants'
 import { isEmpty } from 'lodash'
 import jwt from 'jsonwebtoken'
 import { env } from '~/config/environment'
@@ -82,7 +81,8 @@ const authenticate = async (data) => {
   return {
     result: true,
     token: generateAccessToken(userFoundByEmail),
-    refreshToken: jwt.sign(userFoundByEmail, env.REFRESH_TOKEN_SECRET)
+    refreshToken: jwt.sign(userFoundByEmail, env.REFRESH_TOKEN_SECRET),
+    user: userFoundByEmail
   }
 }
 

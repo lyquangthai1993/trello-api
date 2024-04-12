@@ -16,7 +16,7 @@ const createNew = async (reqBody) => {
   //   result: true
   // }
 }
-//
+
 const authenticate = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
