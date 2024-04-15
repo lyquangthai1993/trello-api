@@ -7,14 +7,16 @@ import { columnModel } from '~/models/columnModel'
 import { cardModel } from '~/models/cardModel'
 import jwt from 'jsonwebtoken'
 
-const createNew = async (reqBody) => {
+const createNew = async (reqBody, ownerId) => {
   // eslint-disable-next-line no-useless-catch
   try {
     // xử lí logic dữ liệu
     const newObject = {
       ...reqBody,
-      slug: slugify(reqBody?.title)
+      slug: slugify(reqBody?.title),
+      owner: ownerId
     }
+    // console.log('newObject = ', newObject)
 
     const createdObject = await boardModel.createNew(newObject)
 

@@ -4,8 +4,8 @@ import { boardService } from '~/services/boardService'
 const createNew = async (req, res, next) => {
   try {
     // điều hướng dữ liệu sang tầng service
-
-    const createdBoard = await boardService.createNew(req.body)
+    // console.log('req.user = ', req.user)
+    const createdBoard = await boardService.createNew(req.body, req.user._id)
 
     // kết quả về phía client
     res.status(StatusCodes.CREATED).json(createdBoard)
