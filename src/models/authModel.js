@@ -78,6 +78,8 @@ const authenticate = async (data) => {
     }
   }
 
+  delete userFoundByEmail.password
+
   return {
     result: true,
     token: generateAccessToken(userFoundByEmail),

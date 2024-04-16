@@ -25,7 +25,9 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
 
   createdAt: Joi.date().timestamp('javascript').default(Date.now()),
   updatedAt: Joi.date().timestamp('javascript').default(null),
-  _destroy: Joi.boolean().default(false)
+  _destroy: Joi.boolean().default(false),
+
+  owner: Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
 })
 
 // chi dinh nhung truong nao khong su dung trong ham update
@@ -38,7 +40,8 @@ const validateBeforeCreate = async (data) => {
 const createNew = async (data) => {
   try {
     const validData = await validateBeforeCreate(data)
-
+    // const userFoundByEmail = await authModel.findOneById()
+    validData.owner = new ObjectId(data.owner)
     return await GET_DB().collection(BOARD_COLLECTION_NAME).insertOne(validData)
   } catch (error) {
     throw new Error(error)
@@ -48,7 +51,7 @@ const createNew = async (data) => {
 const getList = async (userId) => {
   try {
     // console.log('board model userId = ', userId)
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({ owner: new ObjectId(userId) }).toArray()
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({ owner: new ObjectId(userId) }).sort({ 'createdAt': -1 }).toArray()
     // console.log('result = ', result)
     return result || []
   } catch (error) {

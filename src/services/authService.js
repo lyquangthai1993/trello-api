@@ -8,13 +8,6 @@ const createNew = async (reqBody) => {
       result: !!createdObject.insertedId
     }
   }
-  // tra ve object detail moi vua tao
-  // const createdUser = await authModel.findOneById(createdObject.insertedId)
-  //
-  // return {
-  //   ...createdUser,
-  //   result: true
-  // }
 }
 
 const authenticate = async (reqBody) => {
