@@ -3,20 +3,21 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import Joi from 'joi'
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
-import { GET_DB } from '~/config/mongodb'
-import { ObjectId } from 'mongodb'
-import { BOARD_TYPE } from '~/utils/constants'
-import { columnModel } from '~/models/columnModel'
-import { cardModel } from '~/models/cardModel'
+import Joi from 'joi';
+import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators';
+import { GET_DB } from '~/config/mongodb';
+import { ObjectId } from 'mongodb';
+import { BOARD_TYPE } from '~/utils/constants';
+import { columnModel } from '~/models/columnModel';
+import { cardModel } from '~/models/cardModel';
+import { authModel } from '~/models/authModel';
 
 const BOARD_COLLECTION_NAME = 'boards'
 
 const BOARD_COLLECTION_SCHEMA = Joi.object({
   title: Joi.string().required().min(3).max(50).trim().strict(),
   slug: Joi.string().required().min(3).trim().strict(),
-  description: Joi.string().required().min(3).max(256).trim().strict(),
+  description: Joi.string().max(256).trim().strict(),
   type: Joi.string().valid(BOARD_TYPE.PUBLIC, BOARD_TYPE.PRIVATE).required(),
 
   columnOrderIds: Joi.array().items(
@@ -51,7 +52,33 @@ const createNew = async (data) => {
 const getList = async (userId) => {
   try {
     // console.log('board model userId = ', userId)
-    const result = await GET_DB().collection(BOARD_COLLECTION_NAME).find({ owner: new ObjectId(userId) }).sort({ 'createdAt': -1 }).toArray()
+    const result = await GET_DB().collection(BOARD_COLLECTION_NAME)
+    // .find({ owner: new ObjectId(userId) })
+      .aggregate([
+        {
+          $match: {
+            owner: new ObjectId(userId),
+            _destroy: false
+          }
+        },
+        {
+          $lookup: {
+            from: authModel.COLLECTION_NAME,
+            localField: 'owner',
+            foreignField: '_id',
+            pipeline: [
+              {
+                $match: {
+                  _destroy: false
+                }
+              }
+            ],
+            as: 'ownerInfo'
+          }
+        }
+      ])
+      .sort({ 'createdAt': -1 })
+      .toArray()
     // console.log('result = ', result)
     return result || []
   } catch (error) {

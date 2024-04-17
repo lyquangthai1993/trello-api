@@ -15,7 +15,7 @@ const createNew = async (req, res, next) => {
       'any.required': 'This field is required',
       'string.empty': 'This filed cannot be empty'
     }),
-    description: Joi.string().required().min(3).max(256).trim().strict(),
+    description: Joi.string().optional().max(256).trim().strict(),
     type: Joi.string().valid(BOARD_TYPE.PUBLIC, BOARD_TYPE.PRIVATE).required()
   })
 
@@ -35,7 +35,7 @@ const update = async (req, res, next) => {
   // truong hop update nen khong can dung required()
   const correctCondition = Joi.object({
     title: Joi.string().min(3).max(50).trim().strict(),
-    description: Joi.string().min(3).max(256).trim().strict(),
+    description: Joi.string().optional().max(256).trim().strict(),
     type: Joi.string().valid(BOARD_TYPE.PUBLIC, BOARD_TYPE.PRIVATE),
 
     columnOrderIds: Joi.array().items(
