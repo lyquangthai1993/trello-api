@@ -70,7 +70,9 @@ const update = async (req, res, next) => {
 
 const refreshToken = async (req, res, next) => {
   try {
-    const resRefreshToken = await authService.refreshToken(req.body)
+    const resRefreshToken = await authService.refreshToken(req.body, {
+      abortEarly: false
+    })
 
     if (resRefreshToken.result) {
       res.status(StatusCodes.OK).json(resRefreshToken)

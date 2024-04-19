@@ -43,7 +43,7 @@ const authenticate = async (req, res, next) => {
 const refreshToken = async (req, res, next) => {
   const correctCondition = Joi.object({
     refreshToken: Joi.string().required()
-  })
+  }).unknown()
 
   try {
     await correctCondition.validateAsync(req.body, {
