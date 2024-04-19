@@ -11,13 +11,13 @@ export const authHandlingMiddleware = (req, res, next) => {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err || prefix !== 'Bearer') {
-        return res.sendStatus(StatusCodes.UNAUTHORIZED, 'Unauthorized test')
+        return res.sendStatus(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized', result: false })
       }
 
       req.user = user
       next()
     })
   } else {
-    res.sendStatus(StatusCodes.UNAUTHORIZED, 'Unauthorized')
+    res.sendStatus(StatusCodes.UNAUTHORIZED, 'Unauthorized').json({ message: 'Unauthorized', result: false })
   }
 }

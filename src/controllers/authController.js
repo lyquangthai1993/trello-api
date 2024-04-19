@@ -6,8 +6,10 @@ const createNew = async (req, res, next) => {
     // điều hướng dữ liệu sang tầng service
     const createdUser = await authService.createNew(req.body)
     if (!createdUser.result) {
+      //✅ success
       res.status(StatusCodes.NOT_ACCEPTABLE).json(createdUser)
     } else {
+      //❌
       res.status(StatusCodes.CREATED).json(createdUser)
     }
 

@@ -14,8 +14,6 @@ export const refreshToken = async (reqBody) => {
         reject({ result: false, message: 'Invalid refresh token' })
       } else {
         const userDB = await authModel.findOneById(user?._id)
-        // delete userDB.password
-        // console.log('userDB = ', userDB)
         const newToken = generateAccessToken(userDB)
         resolve({ result: true, token: newToken })
       }
