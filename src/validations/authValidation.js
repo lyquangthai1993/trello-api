@@ -40,7 +40,25 @@ const authenticate = async (req, res, next) => {
   }
 }
 
+const refreshToken = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    refreshToken: Joi.string().required()
+  })
+
+  try {
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false
+    })
+
+    //validate dữ liệu hợp lệ thì cho request đi tiếp qua tầng controller
+    next()
+  } catch (error) {
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message))
+  }
+}
+
 export const authValidation = {
   createNew,
-  authenticate
+  authenticate,
+  refreshToken
 }

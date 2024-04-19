@@ -6,7 +6,7 @@ const createNew = async (req, res, next) => {
     // điều hướng dữ liệu sang tầng service
     const createdUser = await authService.createNew(req.body)
     if (!createdUser.result) {
-      res.status(StatusCodes.UNAUTHORIZED).json(createdUser)
+      res.status(StatusCodes.NOT_ACCEPTABLE).json(createdUser)
     } else {
       res.status(StatusCodes.CREATED).json(createdUser)
     }
@@ -68,11 +68,28 @@ const update = async (req, res, next) => {
   }
 }
 
+const refreshToken = async (req, res, next) => {
+  try {
+    const resRefreshToken = await authService.refreshToken(req.body)
+
+    if (resRefreshToken.result) {
+      res.status(StatusCodes.OK).json(resRefreshToken)
+    } else {
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        result: false,
+        message: 'Invalid refresh token'
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const authController = {
   createNew,
   update,
   deleteId,
   getDetails,
-  authenticate
+  authenticate,
+  refreshToken
 }

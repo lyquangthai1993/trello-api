@@ -1,5 +1,5 @@
-
 import jwt from 'jsonwebtoken'
+import { StatusCodes } from 'http-status-codes'
 
 export const authHandlingMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization
@@ -11,17 +11,13 @@ export const authHandlingMiddleware = (req, res, next) => {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err || prefix !== 'Bearer') {
-        return res.sendStatus(403)
+        return res.sendStatus(StatusCodes.UNAUTHORIZED, 'Unauthorized test')
       }
 
       req.user = user
       next()
     })
   } else {
-    res.sendStatus(401, 'Unauthorized')
+    res.sendStatus(StatusCodes.UNAUTHORIZED, 'Unauthorized')
   }
-}
-
-export const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN })
 }

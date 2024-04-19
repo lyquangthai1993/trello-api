@@ -5,7 +5,8 @@ import bscrypt from 'bcrypt'
 import { isEmpty } from 'lodash'
 import jwt from 'jsonwebtoken'
 import { env } from '~/config/environment'
-import { generateAccessToken } from '~/middlewares/authMiddleware'
+import { generateAccessToken } from '~/services/authService'
+
 // const INVALID_UPDATE_FIELDS = ['_id', 'createdAt'];
 
 // Define Collection (name & schema)
@@ -92,7 +93,17 @@ const findOneById = async (id) => {
   try {
     return await GET_DB()
       .collection(COLLECTION_NAME)
-      .findOne({ _id: new ObjectId(id) })
+      .findOne(
+        {
+          _id: new ObjectId(id)
+        },
+        {
+          projection:
+                  {
+                    password: 0
+                  }
+        }
+      )
   } catch (error) {
     throw new Error(error)
   }

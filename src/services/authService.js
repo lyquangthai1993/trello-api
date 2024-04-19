@@ -1,4 +1,27 @@
 import { authModel } from '~/models/authModel'
+import jwt from 'jsonwebtoken'
+
+export const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN })
+}
+export const refreshToken = async (reqBody) => {
+  const refreshToken = reqBody.refreshToken
+
+  return new Promise((resolve, reject) => {
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+      if (err) {
+        // console.log('jwt.verify err = ', err)
+        reject({ result: false, message: 'Invalid refresh token' })
+      } else {
+        const userDB = await authModel.findOneById(user?._id)
+        // delete userDB.password
+        // console.log('userDB = ', userDB)
+        const newToken = generateAccessToken(userDB)
+        resolve({ result: true, token: newToken })
+      }
+    })
+  })
+}
 
 const createNew = async (reqBody) => {
   const createdObject = await authModel.createNew(reqBody)
@@ -35,5 +58,6 @@ const update = async (cardId, reqBody) => {
 export const authService = {
   createNew,
   update,
-  authenticate
+  authenticate,
+  refreshToken
 }

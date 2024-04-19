@@ -3,7 +3,6 @@ import { authValidation } from '~/validations/authValidation'
 import { authController } from '~/controllers/authController'
 import { authHandlingMiddleware } from '~/middlewares/authMiddleware'
 
-
 const Router = express.Router()
 
 Router.route('/login')
@@ -11,6 +10,9 @@ Router.route('/login')
 
 Router.route('/register')
   .post(authValidation.createNew, authController.createNew)
+
+Router.route('/refresh-token')
+  .post(authValidation.refreshToken, authController.refreshToken)
 
 // Apply middleware to all other routes
 Router.use(authHandlingMiddleware)
