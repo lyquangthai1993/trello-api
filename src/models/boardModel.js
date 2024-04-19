@@ -3,14 +3,14 @@
  * YouTube: https://youtube.com/@trungquandev
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
-import Joi from 'joi';
-import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators';
-import { GET_DB } from '~/config/mongodb';
-import { ObjectId } from 'mongodb';
-import { BOARD_TYPE } from '~/utils/constants';
-import { columnModel } from '~/models/columnModel';
-import { cardModel } from '~/models/cardModel';
-import { authModel } from '~/models/authModel';
+import Joi from 'joi'
+import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
+import { GET_DB } from '~/config/mongodb'
+import { ObjectId } from 'mongodb'
+import { BOARD_TYPE } from '~/utils/constants'
+import { columnModel } from '~/models/columnModel'
+import { cardModel } from '~/models/cardModel'
+import { authModel } from '~/models/authModel'
 
 const BOARD_COLLECTION_NAME = 'boards'
 
