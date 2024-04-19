@@ -13,8 +13,7 @@ export const authHandlingMiddleware = (req, res, next) => {
       if (err || prefix !== 'Bearer') {
         return res.status(StatusCodes.UNAUTHORIZED).send({
           status: StatusCodes.UNAUTHORIZED,
-          statusText: 'Unauthorized',
-          result: false
+          message: 'Unauthorized'
         })
       }
 
@@ -25,8 +24,7 @@ export const authHandlingMiddleware = (req, res, next) => {
     return res.status(StatusCodes.UNAUTHORIZED)
       .send({
         status: StatusCodes.UNAUTHORIZED,
-        statusText: 'Unauthorized',
-        result: false
+        message: 'Unauthorized'
       })
   }
 }
