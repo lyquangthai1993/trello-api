@@ -40,7 +40,26 @@ const authenticate = async (reqBody) => {
   }
 }
 
-const update = async (cardId, reqBody) => {
+const authorize = (token) => {
+  let result = {}
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      // console.log('err ======== ', err)
+      result = { result: false, message: 'Invalid token' }
+    }
+
+    if (user) {
+      // console.log('Class: , Function: , Line 50 (): ', user)
+      result.user = user
+      result.result = true
+      result.message = 'Authorized'
+    }
+  })
+
+  return result
+}
+
+const update = async (userId, reqBody) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const updateData = {
@@ -48,7 +67,7 @@ const update = async (cardId, reqBody) => {
       updateAt: Date.now()
     }
 
-    return await authModel.update(cardId, updateData)
+    return await authModel.update(userId, updateData)
   } catch (error) {
     throw error
   }
@@ -57,5 +76,6 @@ export const authService = {
   createNew,
   update,
   authenticate,
+  authorize,
   refreshToken
 }

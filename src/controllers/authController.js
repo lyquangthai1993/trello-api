@@ -58,6 +58,23 @@ const authenticate = async (req, res, next) => {
   }
 }
 
+const authorize = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization
+
+    const split = authHeader.split(' ')
+    const prefix = split[0]
+    const token = split[1]
+
+    const user = authService.authorize(token)
+
+    res.status(StatusCodes.OK).json(user)
+
+  } catch (error) {
+    next(error)
+  }
+}
+
 const update = async (req, res, next) => {
   try {
     const params = req.params
@@ -95,5 +112,6 @@ export const authController = {
   deleteId,
   getDetails,
   authenticate,
+  authorize,
   refreshToken
 }

@@ -14,6 +14,9 @@ Router.route('/register')
 Router.route('/refresh-token')
   .post(authValidation.refreshToken, authController.refreshToken)
 
+Router.route('/me')
+  .get(authController.authorize)
+
 // Apply middleware to all other routes
 Router.use(authHandlingMiddleware)
 
