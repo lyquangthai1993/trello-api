@@ -80,6 +80,8 @@ const authenticate = async (data) => {
   }
 
   delete userFoundByEmail.password
+  delete userFoundByEmail.createdAt
+  delete userFoundByEmail.updatedAt
 
   return {
     result: true,
