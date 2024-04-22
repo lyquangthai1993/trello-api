@@ -41,22 +41,23 @@ const authenticate = async (reqBody) => {
 }
 
 const authorize = (token) => {
-  let result = {}
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      // console.log('err ======== ', err)
-      result = { result: false, message: 'Invalid token' }
-    }
 
-    if (user) {
-      // console.log('Class: , Function: , Line 50 (): ', user)
-      result.user = user
-      result.result = true
-      result.message = 'Authorized'
-    }
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
+      if (err) {
+        console.log('err ======== ', err)
+        reject({ result: false, message: 'Invalid token' })
+      } else {
+        try {
+          const userDB = await authModel.findOneById(user?._id)
+          resolve({ result: true, message: 'Success', user: userDB })
+        } catch (error) {
+          reject({ result: false, message: error.message })
+        }
+      }
+    })
   })
 
-  return result
 }
 
 const update = async (userId, reqBody) => {
