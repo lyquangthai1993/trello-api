@@ -27,7 +27,7 @@ const createNew = async (reqBody, ownerId) => {
   }
 }
 
-const getList = async (headersAuthorization) => {
+const getList = async (headersAuthorization, reqQuery) => {
   // eslint-disable-next-line no-useless-catch
   try {
     // xử lí logic dữ liệu
@@ -49,13 +49,14 @@ const getList = async (headersAuthorization) => {
       }
     })
 
-    const boards = await boardModel.getList(authData._id)
+    const resBoardModel = await boardModel.getList(authData._id, reqQuery)
     // console.log('boards ========== ', boards)
     // tra ve ket qua
     return {
       result: true,
-      data: boards,
-      count: boards.length || 0
+      data: resBoardModel.items,
+      count: resBoardModel.totalItems || 0,
+      totalPages: resBoardModel.totalPages || 0
     }
   } catch (error) {
     throw error

@@ -17,7 +17,7 @@ const createNew = async (req, res, next) => {
 const getList = async (req, res, next) => {
   try {
     // điều hướng dữ liệu sang tầng service
-    const boards = await boardService.getList(req.headers.authorization)
+    const boards = await boardService.getList(req.headers.authorization, req.query)
     // console.log('boards = ', boards)
     // kết quả về phía client
     res.status(StatusCodes.OK).json(boards)

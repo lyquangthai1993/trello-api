@@ -49,9 +49,21 @@ const createNew = async (data) => {
   }
 }
 
-const getList = async (userId) => {
+const getList = async (userId, reqQuery) => {
+  // console.log('reqQuery = ', reqQuery)
+
+  const page = (reqQuery.page * 1) || 0
+  const perPage = (reqQuery.perPage * 1) || 3
+
   try {
-    // console.log('board model userId = ', userId)
+    const totalItems = await GET_DB().collection(BOARD_COLLECTION_NAME)
+      .find({ owner: new ObjectId(userId), _destroy: false })
+      .count()
+
+    const executionStats = await GET_DB().collection(BOARD_COLLECTION_NAME)
+      .find({ owner: new ObjectId(userId) }).explain('executionStats')
+    console.log('executionStats = ', executionStats)
+
     const result = await GET_DB().collection(BOARD_COLLECTION_NAME)
     // .find({ owner: new ObjectId(userId) })
       .aggregate([
@@ -75,12 +87,17 @@ const getList = async (userId) => {
             ],
             as: 'ownerInfo'
           }
-        }
+        },
+        { $sort: { 'createdAt': -1 } },
+        { $skip: page * perPage },
+        { $limit: perPage }
       ])
-      .sort({ 'createdAt': -1 })
+    // .sort({ 'createdAt': -1 })
+    // .skip(page * perPage)
+    // .limit(perPage)
       .toArray()
-    // console.log('result = ', result)
-    return result || []
+    const totalPages = Math.ceil(totalItems / (perPage * 1))
+    return { items: result || [], totalItems, totalPages }
   } catch (error) {
     throw new Error(error)
   }
